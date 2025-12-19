@@ -1,0 +1,12 @@
+﻿Install-Package Microsoft.AspNetCore.Authentication.JwtBearer
+Install-Package Microsoft.AspNetCore.Identity.EntityFrameworkCore
+Install-Package Microsoft.EntityFrameworkCore.SqlServer
+Install-Package Microsoft.EntityFrameworkCore.Tools
+
+Npgsql.EntityFrameworkCore.PostgreSQL
+Microsoft.AspNetCore.Authentication.JwtBearer
+BCrypt.Net-Next
+
+Host=localhost;Port=5432;Database=jwt_auth_db;Username=postgres;Password=YOUR_PASSWORD
+
+
