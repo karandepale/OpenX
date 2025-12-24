@@ -17,6 +17,7 @@ namespace OpenX.BusinessLogic
         private readonly DataBaseOparations dataBaseOparations = dataBaseOparations;
         private readonly IConfiguration appConfig = appConfig;
         private readonly JwtTokenHelper jwtHelper = jwtHelper;
+        private readonly TimeProvider timeProvider;
 
         public async Task<OpenXResponse> Signup(SignupDto request)
         { 
@@ -38,7 +39,7 @@ namespace OpenX.BusinessLogic
                     UserId = Guid.NewGuid(),
                     UserName = request.UserName,
                     PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
-                    CreatedAt = DateTime.UtcNow
+                    CreatedAt = timeProvider.GetUtcNow().DateTime
                 };
               
                 await dataBaseOparations.CreateUser(user);

@@ -7,12 +7,12 @@ namespace OpenX.DataWrapper
     public class DataBaseOparations (AppDbContext dbContext)
     {
         private readonly AppDbContext context = dbContext;
-
+         
         public async Task<bool> UserExists(string userName)
         {
             try
             {
-                return await context.Users.AnyAsync(u => u.UserName == userName);
+                return await context.Users.AnyAsync(u => u.UserName == userName).ConfigureAwait(false); ;
             }
             catch (Exception ex)
             {
@@ -26,7 +26,7 @@ namespace OpenX.DataWrapper
             try
             {
                 context.Users.Add(user);
-                await context.SaveChangesAsync();
+                await context.SaveChangesAsync().ConfigureAwait(false); ;
             }
             catch (Exception ex)
             {
@@ -38,7 +38,7 @@ namespace OpenX.DataWrapper
         {
             try
             {
-                return await context.Users.FirstOrDefaultAsync(u => u.UserName == userName);
+                return await context.Users.FirstOrDefaultAsync(u => u.UserName == userName).ConfigureAwait(false); ;
             }
             catch (Exception ex)
             {
