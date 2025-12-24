@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using OpenX.Data;
+using OpenX.DataWrapper;
 using OpenX.DTO_s;
 using OpenX.HelperClasses;
 using OpenX.Interfaces;
@@ -11,23 +12,23 @@ using System.Text;
 
 namespace OpenX.BusinessLogic
 {
-    public class AccountControllerLogic(AppDbContext context, IConfiguration appConfig, JwtTokenHelper jwtHelper) : IAccountControllerLogic
+    public class AccountControllerLogic(DataBaseOparations dataBaseOparations, IConfiguration appConfig, JwtTokenHelper jwtHelper) : IAccountControllerLogic
     {
-        private readonly AppDbContext context = context;
+        private readonly DataBaseOparations dataBaseOparations = dataBaseOparations;
         private readonly IConfiguration appConfig = appConfig;
         private readonly JwtTokenHelper jwtHelper = jwtHelper;
 
         public async Task<OpenXResponse> Signup(SignupDto request)
-        {
+        { 
             try
             {
-                bool userExists = await context.Users.AnyAsync(u => u.UserName == request.UserName);
+                bool userExists = await dataBaseOparations.UserExists(request.UserName);
                 if (userExists)
                 {
                     return new OpenXResponse
                     {
                         Success = false,
-                        Message = "Username already exists",
+                        Message = "User already exists",
                         JwtToken = string.Empty
                     };
                 }
@@ -39,15 +40,14 @@ namespace OpenX.BusinessLogic
                     PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
                     CreatedAt = DateTime.UtcNow
                 };
-
-                context.Users.Add(user);
-                await context.SaveChangesAsync();
-
+              
+                await dataBaseOparations.CreateUser(user);
                 var token = jwtHelper.GenerateJwtToken(user);
+               
                 return new OpenXResponse
                 {
                     Success = true,
-                    Message = "Signup logic executed successfully",
+                    Message = "User registered successfully",
                     JwtToken = token 
                 };
             }
@@ -62,7 +62,7 @@ namespace OpenX.BusinessLogic
         {
             try
             {
-                var user = await context.Users.FirstOrDefaultAsync(u => u.UserName == request.UserName);
+                var user = await dataBaseOparations.GetUserByUsername(request.UserName);
 
                 if (user == null || !BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash))
                 {
@@ -78,7 +78,7 @@ namespace OpenX.BusinessLogic
                 return new OpenXResponse
                 {
                     Success = true,
-                    Message = "Login logic executed successfully",
+                    Message = "User Logged in successfully",
                     JwtToken = token
                 };
             }

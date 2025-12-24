@@ -29,7 +29,7 @@ namespace OpenX.Controllers
                 { 
                     return Ok(new
                     {
-                        message = "User registered successfully",
+                        message = signupRes.Message,
                         token = signupRes.JwtToken,
                         expiresIn = appConfig["Jwt:ExpireMinutes"]
                     });
@@ -59,8 +59,8 @@ namespace OpenX.Controllers
                 if (loginRes.Success)
                 {
                     return Ok(new
-                    {
-                        message = "User Logged in successfully",
+                    { 
+                        message = loginRes.Message,
                         token = loginRes.JwtToken,
                         expiresIn = appConfig["Jwt:ExpireMinutes"]
                     });

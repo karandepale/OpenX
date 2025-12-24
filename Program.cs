@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using OpenX.BusinessLogic;
 using OpenX.Data;
+using OpenX.DataWrapper;
 using OpenX.HelperClasses;
 using OpenX.Interfaces;
 using System.Text;
@@ -37,6 +38,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 //DI
 builder.Services.AddScoped<IAccountControllerLogic, AccountControllerLogic>();
 builder.Services.AddScoped<JwtTokenHelper>();
+builder.Services.AddScoped<DataBaseOparations>();
 
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();
