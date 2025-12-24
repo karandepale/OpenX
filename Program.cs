@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using OpenX.BusinessLogic;
 using OpenX.Data;
+using OpenX.HelperClasses;
+using OpenX.Interfaces;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,6 +33,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             IssuerSigningKey = new SymmetricSecurityKey(key)
         };
     });
+
+//DI
+builder.Services.AddScoped<IAccountControllerLogic, AccountControllerLogic>();
+builder.Services.AddScoped<JwtTokenHelper>();
 
 builder.Services.AddAuthorization();
 builder.Services.AddControllers();

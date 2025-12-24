@@ -2,127 +2,84 @@
 using Microsoft.IdentityModel.Tokens;
 using OpenX.Data;
 using OpenX.DTO_s;
+using OpenX.Interfaces;
 using OpenX.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace OpenX.Controllers
 {
     [ApiController]
     [Route("api/auth")]
-    public class AccountController(AppDbContext context, IConfiguration config) : ControllerBase
+    public class AccountController(IConfiguration appConfig, IAccountControllerLogic accountControllerLogic) : ControllerBase
     {
-        private readonly AppDbContext _context = context;
-        private readonly IConfiguration _config = config;
+        private readonly IConfiguration appConfig = appConfig;
+        private readonly IAccountControllerLogic accountControllerLogic = accountControllerLogic;
 
-      
-         
+
         [HttpPost("signup")]
-        public IActionResult Signup([FromBody] SignupDto request)
+        public async Task<IActionResult> Signup([FromBody] SignupDto request)
         {
             try
             {
-                bool userExists = _context.Users.Any(u => u.UserName == request.UserName);
-                if (userExists)
-                    return BadRequest("Username already exists");
-
-                var user = new UserDetails
-                {
-                    UserId = Guid.NewGuid(),
-                    UserName = request.UserName,
-                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
-                    CreatedAt = DateTime.UtcNow
-                };
-
-                _context.Users.Add(user);
-                _context.SaveChanges();
-
-                var token = GenerateJwtToken(user);
-
-                return Ok(new
-                {
-                    message = "User registered successfully",
-                    token,
-                    expiresIn = _config["Jwt:ExpireMinutes"]
-                });
+                var signupRes =  await accountControllerLogic.Signup(request);
+                if (signupRes.Success)
+                { 
+                    return Ok(new
+                    {
+                        message = "User registered successfully",
+                        token = signupRes.JwtToken,
+                        expiresIn = appConfig["Jwt:ExpireMinutes"]
+                    });
+                }    
+                else
+                { 
+                    return BadRequest(signupRes.Message);
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error AccountController: inSignup(): {ex.Message}, {ex.StackTrace}");
-                return null;
+                return BadRequest(ex.Message);
             }
-         
+
         }
-
-
 
 
 
         [HttpPost("login")]
-        public IActionResult Login([FromBody] LoginRequestDto request)
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
         {
             try
             {
-            var user = _context.Users
-                .FirstOrDefault(u => u.UserName == request.UserName);
+                var loginRes = await accountControllerLogic.Login(request);
 
-            if (user == null)
-                return Unauthorized("Invalid username or password");
-
-            bool isPasswordValid =
-                BCrypt.Net.BCrypt.Verify(request.Password, user.PasswordHash);
-
-            if (!isPasswordValid)
-                return Unauthorized("Invalid username or password");
-
-            var token = GenerateJwtToken(user);
-
-            return Ok(new
-            {
-                message = "User Logged in successfully",
-                token,
-                expiresIn = _config["Jwt:ExpireMinutes"]
-            });
+                if (loginRes.Success)
+                {
+                    return Ok(new
+                    {
+                        message = "User Logged in successfully",
+                        token = loginRes.JwtToken,
+                        expiresIn = appConfig["Jwt:ExpireMinutes"]
+                    });
+                }
+                else
+                {
+                    return BadRequest(loginRes.Message);
+                }   
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error AccountController: Login(): {ex.Message}, {ex.StackTrace}");
-                return null;
+                return BadRequest(ex.Message);
             }
         }
 
 
 
-        private string GenerateJwtToken(UserDetails user)
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
-                new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName)
-            };
-
-            var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_config["Jwt:Key"]!)
-            );
-
-            var creds = new SigningCredentials(
-                key, SecurityAlgorithms.HmacSha256
-            );
-
-            var token = new JwtSecurityToken(
-                issuer: _config["Jwt:Issuer"],
-                audience: _config["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(
-                    Convert.ToDouble(_config["Jwt:ExpireMinutes"])
-                ),
-                signingCredentials: creds
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
-
+      
 
     }
 }
