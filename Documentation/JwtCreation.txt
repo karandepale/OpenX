@@ -7,6 +7,23 @@ Npgsql.EntityFrameworkCore.PostgreSQL
 Microsoft.AspNetCore.Authentication.JwtBearer
 BCrypt.Net-Next
 
+-------------
 Host=localhost;Port=5432;Database=jwt_auth_db;Username=postgres;Password=YOUR_PASSWORD
+
+-------------
+
+"Jwt": {
+  "Key": "Karan_OpenX_PersonalSecretKey", 
+  // Secret key used to SIGN the JWT and to VALIDATE the token on every request
+
+  "Issuer": "OpenX.Api", 
+  // Identifies the server (API) that ISSUES the token
+
+  "Audience": "OpenX.Client", 
+  // Identifies the intended CLIENT/APP that is allowed to use this token
+
+  "ExpireMinutes": 60
+  // Token expiration time in minutes
+}
 
 
