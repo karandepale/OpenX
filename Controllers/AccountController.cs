@@ -11,38 +11,48 @@ namespace OpenX.Controllers
 {
     [ApiController]
     [Route("api/auth")]
-    public class AccountController : ControllerBase
+    public class AccountController(AppDbContext context, IConfiguration config) : ControllerBase
     {
-        private readonly AppDbContext _context;
-        private readonly IConfiguration _config;
+        private readonly AppDbContext _context = context;
+        private readonly IConfiguration _config = config;
 
-        public AccountController(AppDbContext context, IConfiguration config)
-        {
-            _context = context;
-            _config = config;
-        }
-
-
+      
+         
         [HttpPost("signup")]
         public IActionResult Signup([FromBody] SignupDto request)
         {
-            // Check if username exists
-            bool userExists = _context.Users.Any(u => u.UserName == request.UserName);
-            if (userExists)
-                return BadRequest("Username already exists");
-
-            var user = new UserDetails
+            try
             {
-                UserId = Guid.NewGuid(),
-                UserName = request.UserName,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
-                CreatedAt = DateTime.UtcNow
-            };
+                bool userExists = _context.Users.Any(u => u.UserName == request.UserName);
+                if (userExists)
+                    return BadRequest("Username already exists");
 
-            _context.Users.Add(user);
-            _context.SaveChanges();
+                var user = new UserDetails
+                {
+                    UserId = Guid.NewGuid(),
+                    UserName = request.UserName,
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
+                    CreatedAt = DateTime.UtcNow
+                };
 
-            return Ok("User registered successfully");
+                _context.Users.Add(user);
+                _context.SaveChanges();
+
+                var token = GenerateJwtToken(user);
+
+                return Ok(new
+                {
+                    message = "User registered successfully",
+                    token,
+                    expiresIn = _config["Jwt:ExpireMinutes"]
+                });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error AccountController: inSignup(): {ex.Message}, {ex.StackTrace}");
+                return null;
+            }
+         
         }
 
 
@@ -52,6 +62,8 @@ namespace OpenX.Controllers
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequestDto request)
         {
+            try
+            {
             var user = _context.Users
                 .FirstOrDefault(u => u.UserName == request.UserName);
 
@@ -68,10 +80,19 @@ namespace OpenX.Controllers
 
             return Ok(new
             {
+                message = "User Logged in successfully",
                 token,
                 expiresIn = _config["Jwt:ExpireMinutes"]
             });
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error AccountController: Login(): {ex.Message}, {ex.StackTrace}");
+                return null;
+            }
         }
+
+
 
         private string GenerateJwtToken(UserDetails user)
         {
@@ -101,5 +122,7 @@ namespace OpenX.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+
     }
 }
