@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using OpenX.Data;
-using OpenX.Models;
+using OpenX.AuthService.Data;
+using OpenX.AuthService.Models;
 
-namespace OpenX.DataWrapper
+namespace OpenX.AuthService.DataWrapper
 {
     public class DataBaseOparations (AppDbContext dbContext)
     {

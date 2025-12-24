@@ -1,16 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using OpenX.Data;
-using OpenX.DataWrapper;
-using OpenX.DTO_s;
-using OpenX.HelperClasses;
-using OpenX.Interfaces;
-using OpenX.Models;
+using OpenX.AuthService.Data;
+using OpenX.AuthService.DataWrapper;
+using OpenX.AuthService.DTO_s;
+using OpenX.AuthService.HelperClasses;
+using OpenX.AuthService.Interfaces;
+using OpenX.AuthService.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace OpenX.BusinessLogic
+namespace OpenX.AuthService.BusinessLogic
 {
     public class AccountControllerLogic(DataBaseOparations dataBaseOparations, IConfiguration appConfig, JwtTokenHelper jwtHelper) : IAccountControllerLogic
     {

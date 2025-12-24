@@ -1,4 +1,4 @@
-﻿namespace OpenX.Models
+﻿namespace OpenX.AuthService.Models
 {
     public class LoginRequestDto
     {

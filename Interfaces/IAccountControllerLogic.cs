@@ -1,8 +1,8 @@
 ﻿using Azure.Core;
-using OpenX.DTO_s;
-using OpenX.Models;
+using OpenX.AuthService.DTO_s;
+using OpenX.AuthService.Models;
 
-namespace OpenX.Interfaces
+namespace OpenX.AuthService.Interfaces
 {
     public interface IAccountControllerLogic
     {

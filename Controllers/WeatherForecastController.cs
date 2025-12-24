@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace OpenX.Controllers
+namespace OpenX.AuthService.Controllers
 {
     [ApiController]
     [Route("[controller]")]

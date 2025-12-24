@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using OpenX.Models;
+using OpenX.AuthService.Models;
 
-namespace OpenX.Data
+namespace OpenX.AuthService.Data
 {
     public class AppDbContext : DbContext
     {

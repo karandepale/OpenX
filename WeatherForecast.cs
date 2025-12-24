@@ -1,4 +1,4 @@
-namespace OpenX
+namespace OpenX.AuthService
 {
     public class WeatherForecast
     {

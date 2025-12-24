@@ -1,10 +1,10 @@
 ﻿using Microsoft.IdentityModel.Tokens;
-using OpenX.Models;
+using OpenX.AuthService.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace OpenX.HelperClasses
+namespace OpenX.AuthService.HelperClasses
 {
     public class JwtTokenHelper(IConfiguration appConfig)
     {

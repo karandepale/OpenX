@@ -1,4 +1,4 @@
-﻿namespace OpenX.DTO_s
+﻿namespace OpenX.AuthService.DTO_s
 {
     public class SignupDto
     {

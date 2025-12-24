@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using OpenX.BusinessLogic;
-using OpenX.Data;
-using OpenX.DataWrapper;
-using OpenX.HelperClasses;
-using OpenX.Interfaces;
+using OpenX.AuthService.BusinessLogic;
+using OpenX.AuthService.Data;
+using OpenX.AuthService.DataWrapper;
+using OpenX.AuthService.HelperClasses;
+using OpenX.AuthService.Interfaces;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);

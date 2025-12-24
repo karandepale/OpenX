@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using OpenX.Data;
-using OpenX.DTO_s;
-using OpenX.Interfaces;
-using OpenX.Models;
+using OpenX.AuthService.Data;
+using OpenX.AuthService.DTO_s;
+using OpenX.AuthService.Interfaces;
+using OpenX.AuthService.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OpenX.Controllers
+namespace OpenX.AuthService.Controllers
 {
     [ApiController]
     [Route("api/auth")]
