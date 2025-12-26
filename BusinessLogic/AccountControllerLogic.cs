@@ -12,12 +12,12 @@ using System.Text;
 
 namespace OpenX.AuthService.BusinessLogic
 {
-    public class AccountControllerLogic(DataBaseOparations dataBaseOparations, IConfiguration appConfig, JwtTokenHelper jwtHelper) : IAccountControllerLogic
+    public class AccountControllerLogic(DataBaseOparations dataBaseOparations, IConfiguration appConfig, JwtTokenHelper jwtHelper, TimeProvider timeProvider) : IAccountControllerLogic
     {
         private readonly DataBaseOparations dataBaseOparations = dataBaseOparations;
         private readonly IConfiguration appConfig = appConfig;
         private readonly JwtTokenHelper jwtHelper = jwtHelper;
-        private readonly TimeProvider timeProvider;
+        private readonly TimeProvider timeProvider = timeProvider;
 
         public async Task<OpenXResponse> Signup(SignupDto request)
         { 
@@ -39,7 +39,7 @@ namespace OpenX.AuthService.BusinessLogic
                     UserId = Guid.NewGuid(),
                     UserName = request.UserName,
                     PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
-                    CreatedAt = timeProvider.GetUtcNow().DateTime
+                    CreatedAt = DateTime.UtcNow
                 };
               
                 await dataBaseOparations.CreateUser(user);

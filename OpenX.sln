@@ -5,6 +5,8 @@ VisualStudioVersion = 17.14.36603.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenX.AuthService", "OpenX.AuthService.csproj", "{A1004DDE-F8E2-4648-80B7-BE278CF524E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenX.ApiGateway", "..\OpenX.ApiGateway\OpenX.ApiGateway.csproj", "{28D272FD-395E-4F00-9FDA-425C36DAF84A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{A1004DDE-F8E2-4648-80B7-BE278CF524E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1004DDE-F8E2-4648-80B7-BE278CF524E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1004DDE-F8E2-4648-80B7-BE278CF524E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28D272FD-395E-4F00-9FDA-425C36DAF84A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28D272FD-395E-4F00-9FDA-425C36DAF84A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28D272FD-395E-4F00-9FDA-425C36DAF84A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28D272FD-395E-4F00-9FDA-425C36DAF84A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

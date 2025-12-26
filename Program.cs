@@ -59,4 +59,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// ? Remove hardcoded port - use launchSettings.json instead
 app.Run();
